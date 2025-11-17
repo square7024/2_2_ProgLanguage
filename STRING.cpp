@@ -5,6 +5,7 @@
 // 2025. 11. 5
 // 2025. 11. 10 복사생성자
 // 2025. 11. 12 관찰하고 싶을때만 관찰메시지 출력
+// 2025. 11. 17 출력연산자 오버로딩
 //-----------------------------------------------------------------------------------------------------------
 #include <iostream>
 #include <print>
@@ -109,4 +110,26 @@ void STRING::show() const
 	for (int i = 0; i < len; ++i)
 		cout << p[i];
 	cout << endl;
+}
+
+// 2025. 11. 17
+// 전역연산자 오버로딩 함수 클래스에서 friend로 선언한다.
+STRING operator+(const char* s, const STRING& rhs)
+{
+	STRING temp;
+	unsigned len = strlen(s);
+	temp.len = len + rhs.len;				// temp의 길이 = s의 길이 + rhs의 길이
+	temp.p = new char[temp.len];			// temp의 길이만큼 메모리 확보
+	memcpy(temp.p, s, len);					// 확보한 메모리에 s를 복사
+	memcpy(temp.p + len, rhs.p, rhs.len);	// s를 복사한 이후에 rhs를 복사
+	return temp;
+}
+
+// 2025. 11. 17
+// 전역연산자 오버로딩 함수 클래스에서 friend로 선언한다.
+ostream& operator<<(ostream& os, const STRING& rhs)
+{
+	for (int i = 0; i < rhs.len; ++i)
+		os << rhs.p[i];
+	return os;
 }

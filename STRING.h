@@ -43,4 +43,9 @@ private:
 	// 2025. 11. 5
 	unsigned id;					// 만들때 붙인 고유번호
 	static unsigned gid;			// 고유번호
+
+	// 2025. 11. 17
+	// 전역연산자 오버로딩 함수 클래스에서 friend로 선언한다.
+	friend STRING operator+(const char*, const STRING&);
+	friend std::ostream& operator<<(std::ostream&, const STRING&);
 };
