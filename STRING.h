@@ -18,19 +18,26 @@
 class STRING {
 public:
 	// 2025. 11. 5
-	STRING();						// 1. 스페셜 함수
-	~STRING();						// 2. 스페셜 함수
+	STRING();							// 1. 스페셜 함수
+	~STRING();							// 2. 스페셜 함수
 
-	STRING(const char* str);		// 스페셜 함수가 아니다.
+	STRING(const char* str);			// 스페셜 함수가 아니다.
 
 	// 2025. 11. 10
-	STRING(const STRING& OTHER);	// 3. 복사생성자(스페셜 함수)
-	STRING& operator=(const STRING&);		// 4. 복사할당연산자
+	STRING(const STRING& OTHER);		// 3. 복사생성자(스페셜 함수)
+	STRING& operator=(const STRING&);	// 4. 복사할당연산자
+
+	// 2025. 11. 19
+	STRING(STRING&&);					// 5. 이동생성자
+	STRING& operator=(STRING&&);		// 6. 이동할당연산자
+
 
 	// 연산자 오버로딩 함수는 여기에
 	// 2025. 11. 12
 	STRING operator+(const STRING& rhs);
-
+	// 2025. 11. 19
+	char operator[](int) const;
+	char& operator[](int);
 
 	// 인터페이스 함수 - 클래스의 정보를 바깥 세상에 전달
 	unsigned length();

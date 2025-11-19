@@ -88,6 +88,43 @@ STRING& STRING::operator=(const STRING& other)
 	return *this;
 }
 
+// 2025. 11. 19 - 5. 이동생성자
+STRING::STRING(STRING&& other)
+	: id{ ++gid }
+{
+	len = other.len;
+	p = other.p;
+
+	// 원본(other)을 이렇게 해야
+	other.len = 0;
+	other.p = nullptr;
+
+	// 관찰메시지
+	if (관찰)
+		println("[{:5}] 이동생성자      - 내주소:{:014}, 글자수:{:3}, 글자주소:{:014}",
+			id, (void*)this, len, (void*)p);
+}
+
+// 2025. 11. 19 - 6. 이동할당연산자
+STRING& STRING::operator=(STRING&& other)
+{
+	if (&other == this)
+		return *this;
+
+	delete[] p;
+
+	len = other.len;
+	p = other.p;
+
+	other.len = 0;
+	other.p = nullptr;
+
+	// 관찰메시지
+	if (관찰)
+		println("[{:5}] 이동할당연산자  - 내주소:{:014}, 글자수:{:3}, 글자주소:{:014}",
+			id, (void*)this, len, (void*)p);
+}
+
 // 2025. 11. 12
 STRING STRING::operator+(const STRING& rhs)
 {
@@ -97,6 +134,18 @@ STRING STRING::operator+(const STRING& rhs)
 	memcpy(temp.p, p, len);					// 메모리에 왼쪽 오퍼런드의 내용 복사
 	memcpy(temp.p + len, rhs.p, rhs.len);	// 메모리에 오른쪽 오퍼런드의 내용 복사
 	return temp;
+}
+
+// 2025. 11. 19
+char STRING::operator[]( int i ) const
+{
+	return p[i];
+}
+
+// 2025. 11. 19
+char& STRING::operator[](int i)
+{
+	return p[i];
 }
 
 unsigned STRING::length()
