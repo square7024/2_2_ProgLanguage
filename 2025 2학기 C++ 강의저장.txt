@@ -7478,11 +7478,14 @@ int main()
 //--------
 {
 	STRING s[] { "333", "1", "55555", "4444", "22" };
+
 	관찰 = true;
 	
 	std::sort(begin(s), end(s), []( STRING& a, STRING& b) {
 		return a.length() - b.length();
 		});
+
+	// return a.length() < b.length(); 로 바꾸면 동작한다.
 
 	관찰 = false;
 
@@ -7497,5 +7500,419 @@ int main()
 // value-categories(c++ reference 참고)
 //		/	\
 //	lvalue	rvalue
+
+============================================================================================================== 25.11.24 월
+
+//-----------------------------------------------------------------------------------------------------------
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
+// 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
+//-----------------------------------------------------------------------------------------------------------
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
+//----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include "save.h"
+#include "STRING.h"
+using namespace std;
+
+extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
+
+class Dog {
+public:
+	bool operator()(const STRING& a, const STRING& b) {		// () 호출 연산자 function call operator
+		return a.length() < b.length();
+	}
+};
+
+//--------
+int main()
+//--------
+{
+	STRING s[] { "333", "1", "55555", "4444", "22" };
+	
+	// 연산자 오버로딩에서 () 연산자 오버로딩 가능하다.
+
+	Dog dog;
+	sort(begin(s), end(s), sizeof(STRING), dog);
+
+	for (const STRING& s : s)
+		cout << s << endl;
+
+	//save("main.cpp");
+}
+
+//-----------------------------------------------------------------------------------------------------------
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
+// 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
+//-----------------------------------------------------------------------------------------------------------
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
+//----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include "save.h"
+#include "STRING.h"
+using namespace std;
+
+extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
+
+class Dog {
+public:
+	bool operator()(const STRING& a, const STRING& b) {		// () 호출 연산자 function call operator
+		return a.length() < b.length();
+	}
+};
+
+//--------
+int main()
+//--------
+{
+	STRING s[] { "333", "1", "55555", "4444", "22" };
+	
+	// 연산자 오버로딩에서 () 연산자 오버로딩 가능하다.
+
+	Dog dog;
+	
+	cout << boolalpha << dog(s[0], s[1]) << endl;
+
+	//save("main.cpp");
+}
+
+//-----------------------------------------------------------------------------------------------------------
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
+// 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
+//-----------------------------------------------------------------------------------------------------------
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
+//----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <random>
+#include <print>
+#include "save.h"
+#include "STRING.h"
+using namespace std;
+
+extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
+
+// [문제] main이 의도대로 실행되도록 class Dog를 coding 하라.
+// class Dog는
+// class Dog {
+// private:
+//    int		id;		// 생성시 [1, 100000] 사이의 랜덤값으로 설정
+//    STRING	name;	// 생성시 [10, 50] 랜덤길이로 설정하고, 글자는 임의의 소문자로 설정
+// };
+
+std::default_random_engine dre;
+std::uniform_int_distribution uidId{ 1, 10'0000 };
+std::uniform_int_distribution uidLen{ 10, 50 };
+std::uniform_int_distribution<int> uidChar{ 'a', 'z' };
+
+class Dog {
+public:
+	Dog() {
+		id = uidId(dre);
+		// 길이와 이름
+		int len = uidLen(dre);
+		char* p = new char[len + 1];
+		for (int i = 0; i < len; ++i)
+			p[i] = uidChar(dre);
+		p[len] = '\0';
+
+		STRING temp(p);
+		delete[] p;
+
+		name = temp;		// name = move(temp); 도 상관없이 돌아간다
+	}
+private:
+	int id;
+	STRING name;
+
+	friend ostream& operator<<(ostream& os, const Dog& dog) {
+		print("[{:6}] - ", dog.id);
+		cout << dog.name;
+		return os;
+	}
+};
+
+//--------
+int main()
+//--------
+{
+	관찰 = true;
+	Dog dogs[10];
+
+	for (const Dog& dog : dogs)
+		cout << dog << endl;		// 화면에 [id는 6칸] - name
+	
+	//save("main.cpp");
+}
+
+//-----------------------------------------------------------------------------------------------------------
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
+// 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
+//-----------------------------------------------------------------------------------------------------------
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
+//----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <random>
+#include <print>
+#include "save.h"
+#include "STRING.h"
+using namespace std;
+
+extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
+
+// [문제] main이 의도대로 실행되도록 class Dog를 coding 하라.
+// class Dog는
+// class Dog {
+// private:
+//    int		id;		// 생성시 [1, 100000] 사이의 랜덤값으로 설정
+//    STRING	name;	// 생성시 [10, 50] 랜덤길이로 설정하고, 글자는 임의의 소문자로 설정
+// };
+
+std::default_random_engine dre;
+std::uniform_int_distribution uidId{ 1, 10'0000 };
+std::uniform_int_distribution uidLen{ 10, 50 };
+std::uniform_int_distribution<int> uidChar{ 'a', 'z' };
+
+class Dog {
+public:
+	Dog() {
+		id = uidId(dre);
+		// 길이와 이름
+		int len = uidLen(dre);
+		char* p = new char[len + 1];
+		for (int i = 0; i < len; ++i)
+			p[i] = uidChar(dre);
+		p[len] = '\0';
+
+		STRING temp(p);
+		delete[] p;
+
+		name = temp;		// name = move(temp); 도 상관없이 돌아간다
+	}
+
+	int getNameLen() const {
+		return name.length();
+	}
+	
+private:
+	int id;
+	STRING name;
+
+	friend ostream& operator<<(ostream& os, const Dog& dog) {
+		print("[{:6}] - ", dog.id);
+		cout << dog.name;
+		return os;
+	}
+};
+
+int 길이오름(const void* a, const void* b)
+{
+	return ((Dog*)a)->getNameLen() - ((Dog*)b)->getNameLen();
+}
+
+//--------
+int main()
+//--------
+{
+	Dog dogs[10];
+
+	// [문제] 길이오름차순으로 정렬하라
+	qsort(dogs, 10, sizeof(Dog), 길이오름);
+
+	for (const Dog& dog : dogs)
+		cout << dog << endl;		// 화면에 [id는 6칸] - name
+	
+	//(*save)("main.cpp");			// save의 원판이 (*save)이다.
+}
+
+//-----------------------------------------------------------------------------------------------------------
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
+// 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
+//-----------------------------------------------------------------------------------------------------------
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
+//----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <random>
+#include <print>
+#include <fstream>
+#include "save.h"
+#include "STRING.h"
+using namespace std;
+
+extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
+
+std::default_random_engine dre;
+std::uniform_int_distribution uidId{ 1, 10'0000 };
+std::uniform_int_distribution uidLen{ 10, 50 };
+std::uniform_int_distribution<int> uidChar{ 'a', 'z' };
+
+class Dog {
+public:
+	Dog() {
+		id = uidId(dre);
+		// 길이와 이름
+		int len = uidLen(dre);
+		char* p = new char[len + 1];
+		for (int i = 0; i < len; ++i)
+			p[i] = uidChar(dre);
+		p[len] = '\0';
+
+		STRING temp(p);
+		delete[] p;
+
+		name = temp;		// name = move(temp); 도 상관없이 돌아간다
+	}
+
+	int getNameLen() const {
+		return name.length();
+	}
+	
+private:
+	int id;
+	STRING name;
+
+	friend ostream& operator<<(ostream& os, const Dog& dog) {
+		os << dog.id << "  " << dog.name;
+		return os;
+	}
+};
+
+// [실습] 파일 "개들.txt" 에 Dog 객체를 1000개 기록한다.
+
+//--------
+int main()
+//--------
+{
+	ofstream out{ "개들.txt" };
+
+	for (int i = 0; i < 1000; ++i) {
+		Dog dog;
+		out << dog << endl;
+	}
+
+	//(*save)("main.cpp");
+}
+
+//-----------------------------------------------------------------------------------------------------------
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
+// 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
+//-----------------------------------------------------------------------------------------------------------
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
+//----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <fstream>
+#include "save.h"
+#include "STRING.h"
+using namespace std;
+
+extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
+
+// [문제] 다운받은 파일 "개들.txt" 에는 1000개의 Dog 객체가 있다.
+// class Dog의 멤버는 다음과 같다.
+//
+// class Dog {
+// private:
+//		int				id;
+//		std::string		name;
+// };
+//
+// 파일에 있는 Dog 객체를 메모리에 저장하라.
+// id 기준 오름차순으로 정렬하라.
+// 화면에 id와 name을 출력하라.
+
+//--------
+int main()
+//--------
+{
+	ifstream in{ "개들.txt" };
+	if (not in)
+		return 20251124;
+
+	int id;
+	string name;
+
+	int cnt{};
+	while (in >> id >> name) {
+		cout << id << " ----- " << name << endl;
+		++cnt;
+	}
+	cout << "모두" << cnt << "개의 Dog를 읽었다" << endl;
+
+	//(*save)("main.cpp");
+}
+
+// 다음 시간에 계속
+//-----------------------------------------------------------------------------------------------------------
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
+// 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
+//-----------------------------------------------------------------------------------------------------------
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
+//----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <fstream>
+#include "save.h"
+#include "STRING.h"
+using namespace std;
+
+extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
+
+// [문제] 다운받은 파일 "개들.txt" 에는 1000개의 Dog 객체가 있다.
+// class Dog의 멤버는 다음과 같다.
+//
+// class Dog {
+// private:
+//		int				id;
+//		std::string		name;
+// };
+//
+// 파일에 있는 Dog 객체를 메모리에 저장하라.
+// id 기준 오름차순으로 정렬하라.
+// 화면에 id와 name을 출력하라.
+
+class Dog {
+private:
+	int id;
+	string name;
+};
+
+//--------
+int main()
+//--------
+{
+	ifstream in{ "개들.txt" };
+	if (not in)
+		return 20251124;
+
+	Dog dog;
+
+	int cnt{};
+	while (in >> dog) {
+		cout << dog;
+		++cnt;
+	}
+	cout << "모두" << cnt << "개의 Dog를 읽었다" << endl;
+
+	//(*save)("main.cpp");
+}
+
+// instancing, 함수객체(functor), getter, setter, 인터페이스 함수
+// @@@ Design Pattern, callable-type
 
 ==============================================================================================================

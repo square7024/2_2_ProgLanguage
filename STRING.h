@@ -40,7 +40,7 @@ public:
 	char& operator[](int);
 
 	// 인터페이스 함수 - 클래스의 정보를 바깥 세상에 전달
-	unsigned length();
+	unsigned length() const;		// 2035. 11. 24 const 일관성있게 수정
 	void show() const;				// 2025. 11. 10 const 일관성
 
 private:

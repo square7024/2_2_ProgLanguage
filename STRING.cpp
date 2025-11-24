@@ -148,7 +148,8 @@ char& STRING::operator[](int i)
 	return p[i];
 }
 
-unsigned STRING::length()
+// 2035. 11. 24 const 일관성있게 수정
+unsigned STRING::length() const
 {
 	return len;
 }

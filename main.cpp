@@ -1,38 +1,54 @@
 //-----------------------------------------------------------------------------------------------------------
-// 2025 2학기 C++ 월56수78					11. 17 수요일                                             (11주 2일)
+// 2025 2학기 C++ 월56수78					11. 24 월요일                                             (12주 1일)
 // 12/15 - (15주 1일) 기말시험 - 다형성(코드는 수업에 사용한 그대로)
 //-----------------------------------------------------------------------------------------------------------
-// Modern C++(C++11) - move sematics
+// class FILE I/O
+// class간의 관계 - 상속(Inheritance)
 //----------------------------------------------------------------------------------------------------------
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <fstream>
 #include "save.h"
 #include "STRING.h"
 using namespace std;
 
 extern bool 관찰;			// 관찰하고 싶으면 true로 바꾸자
 
-int 오름(const void* a, const void* b)
-{
-	return ((STRING*)a)->length() - ((STRING*)b)->length();
-}
+// [문제] 다운받은 파일 "개들.txt" 에는 1000개의 Dog 객체가 있다.
+// class Dog의 멤버는 다음과 같다.
+//
+// class Dog {
+// private:
+//		int				id;
+//		std::string		name;
+// };
+//
+// 파일에 있는 Dog 객체를 메모리에 저장하라.
+// id 기준 오름차순으로 정렬하라.
+// 화면에 id와 name을 출력하라.
+
+class Dog {
+private:
+	int id;
+	string name;
+};
 
 //--------
 int main()
 //--------
 {
-	STRING s[] { "333", "1", "55555", "4444", "22" };
-	관찰 = true;
-	
-	std::sort(begin(s), end(s), []( STRING& a, STRING& b) {
-		return a.length() - b.length();
-		});
+	ifstream in{ "개들.txt" };
+	if (not in)
+		return 20251124;
 
-	관찰 = false;
+	Dog dog;
 
-	for (const STRING& str : s)
-		cout << str << endl;
+	int cnt{};
+	while (in >> dog) {
+		cout << dog;
+		++cnt;
+	}
+	cout << "모두" << cnt << "개의 Dog를 읽었다" << endl;
 
-	//save("main.cpp");
+	//(*save)("main.cpp");
 }
